@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -26,6 +28,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
 //                .withUser("user").password("{noop}user").roles("USER");
 //    }
+
+    /**
+     * inmemory authentication example
+     */
+    @Bean
+    public UserDetailsService users() {
+        UserDetails user = User.builder()
+                .username("user")
+                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
+                .roles("USER")
+                .build();
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
+                .roles("USER", "ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(user, admin);
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -80,24 +100,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      *
      * @return
      */
-    @Bean
-    UserDetailsManager users() {
-        UserDetails user = User.builder()
-                .username("user")
-                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
-                .roles("USER")
-                .build();
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
-                .roles("USER", "ADMIN")
-                .build();
-        EmbeddedDatabaseBuilder databaseBuilder = new EmbeddedDatabaseBuilder().setType(H2)
-                .addScript("classpath:org/springframework/security/core/userdetails/jdbc/users.ddl");
-
-        JdbcUserDetailsManager users = new JdbcUserDetailsManager(databaseBuilder.build());
-        users.createUser(user);
-        users.createUser(admin);
-        return users;
-    }
+//    @Bean
+//    UserDetailsManager users() {
+//        UserDetails user = User.builder()
+//                .username("user")
+//                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
+//                .roles("USER")
+//                .build();
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
+//                .roles("USER", "ADMIN")
+//                .build();
+//        EmbeddedDatabaseBuilder databaseBuilder = new EmbeddedDatabaseBuilder().setType(H2)
+//                .addScript("classpath:org/springframework/security/core/userdetails/jdbc/users.ddl");
+//
+//        JdbcUserDetailsManager users = new JdbcUserDetailsManager(databaseBuilder.build());
+//        users.createUser(user);
+//        users.createUser(admin);
+//        return users;
+//    }
 }
