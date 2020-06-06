@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
@@ -20,6 +21,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          */
         //allowing anly two session
         http.sessionManagement().maximumSessions(2);
+        /**
+         * session creation control
+         */
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+
     }
 
     @Bean
