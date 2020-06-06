@@ -29,6 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          * session fixation attack
          */
         http.sessionManagement().sessionFixation().migrateSession();
+        /**
+         * prevent url from sending session information
+         */
+        http.sessionManagement().enableSessionUrlRewriting(false);
     }
 
     @Bean

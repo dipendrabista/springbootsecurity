@@ -15,3 +15,13 @@ We can control exactly when our session gets created and how Spring Security wil
     stateless – no session will be created or used by Spring Security
 3.Session Fixation Protection With Spring Security
   The framework offers protection against typical Session Fixation attacks by configuring what happens to an existing session when the user tries to authenticate again:
+
+4 Secure Session Cookie
+ Next, we'll discuss how to secure our session cookie.
+
+ We can use the httpOnly and secure flags to secure our session cookie:
+
+ httpOnly: if true then browser script won't be able to access the cookie
+ secure: if true then the cookie will be sent only over HTTPS connection
+ 5.Prevent Using URL Parameters for Session Tracking
+   Exposing session information in the URL is a growing security risk (from place 7 in 2007 to place 2 in 2013 on the OWASP Top 10 List).
