@@ -13,3 +13,5 @@ We can control exactly when our session gets created and how Spring Security wil
     ifRequired – a session will be created only if required (default)
     never – the framework will never create a session itself but it will use one if it already exists
     stateless – no session will be created or used by Spring Security
+3.Session Fixation Protection With Spring Security
+  The framework offers protection against typical Session Fixation attacks by configuring what happens to an existing session when the user tries to authenticate again:

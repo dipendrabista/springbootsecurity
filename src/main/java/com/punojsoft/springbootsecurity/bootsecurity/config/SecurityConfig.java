@@ -25,7 +25,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          * session creation control
          */
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
-
+        /**
+         * session fixation attack
+         */
+        http.sessionManagement().sessionFixation().migrateSession();
     }
 
     @Bean
