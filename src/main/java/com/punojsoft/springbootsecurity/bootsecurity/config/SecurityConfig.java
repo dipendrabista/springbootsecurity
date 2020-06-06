@@ -1,6 +1,7 @@
 package com.punojsoft.springbootsecurity.bootsecurity.config;
 
 import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAccessDeniedHandler;
+import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAuthenticationFailureHandler;
 import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAuthenticationSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomAuthenticationSuccess authenticationSuccessHandler;
+
+    @Autowired
+    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
 
 //    @Override
@@ -74,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/login", "/logout").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();
-        http.formLogin().successHandler(authenticationSuccessHandler)
+        http.formLogin().successHandler(authenticationSuccessHandler).failureHandler(customAuthenticationFailureHandler)
                 .and()
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
                 .and()
