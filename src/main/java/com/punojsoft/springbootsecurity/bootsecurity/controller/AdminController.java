@@ -15,13 +15,13 @@ public class AdminController {
     @Secured("ROLE_ADMIN")
     @GetMapping
     public String index() {
-        return "post list";
+        return "Admin Page";
     }
 
     @GetMapping("/add")
     @PreAuthorize(value = "hasRole('ADMIN')")
     public String add(Principal principal) {
         System.out.println("currently logged in user :" + principal);
-        return "post add";
+        return "Admin add";
     }
 }
