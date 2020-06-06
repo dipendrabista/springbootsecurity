@@ -13,5 +13,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/", "/login", "/logout").permitAll();
         http.formLogin();
+
     }
 }

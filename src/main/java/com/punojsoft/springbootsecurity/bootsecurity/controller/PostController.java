@@ -1,4 +1,4 @@
-package com.punojsoft.springbootsecurity.bootsecurity;
+package com.punojsoft.springbootsecurity.bootsecurity.controller;
 
 import com.punojsoft.springbootsecurity.bootsecurity.facade.IAuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.punojsoft.springbootsecurity.bootsecurity;
+package com.punojsoft.springbootsecurity.bootsecurity.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
