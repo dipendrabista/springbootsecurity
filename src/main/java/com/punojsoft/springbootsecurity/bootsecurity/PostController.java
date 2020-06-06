@@ -18,12 +18,12 @@ public class PostController {
     }
 
     @GetMapping("add")
-    @PreAuthorize(value = "hasRole(ROLE_USER)")
+    @PreAuthorize(value = "hasRole('USER')")
     public String add() {
         return "post add";
     }
 
-    @PostAuthorize(value = "hasAnyRole(ROLE_ADMIN)")
+    @PostAuthorize(value = "hasAnyRole('ADMIN','USER')")
     @GetMapping("/delete")
     public String delete() {
         return "delete post";
