@@ -22,6 +22,7 @@ public class CustomAuthenticationSuccess implements AuthenticationSuccessHandler
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         handle(request, response, authentication);
+        clearAuthenticationAttributes(request);
     }
 
     protected void handle(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException {
@@ -72,11 +73,5 @@ public class CustomAuthenticationSuccess implements AuthenticationSuccessHandler
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
 
-    public void setRedirectStrategy(final RedirectStrategy redirectStrategy) {
-        this.redirectStrategy = redirectStrategy;
-    }
 
-    protected RedirectStrategy getRedirectStrategy() {
-        return redirectStrategy;
-    }
 }
