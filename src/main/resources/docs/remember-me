@@ -1,0 +1,7 @@
+As you can see, the basic configuration using the rememberMe() method
+is extremely simple while remaining very flexible though additional options.
+The key is important here – it is a private value secret for the entire application
+and it will be used when generating the contents of the token.
+
+Additionally, the time the token is valid can be configured from the default of 2 weeks to –
+ for example – one day using tokenValiditySeconds():

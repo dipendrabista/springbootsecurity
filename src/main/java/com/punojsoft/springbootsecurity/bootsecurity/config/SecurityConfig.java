@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().deleteCookies("JSESSIONID")
                 .and()
-                .rememberMe();
+                //default token validity 2 weeks
+                .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(60 * 21 * 1000);
         /**
          * Session management related code
          */
