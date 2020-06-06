@@ -1,5 +1,7 @@
 package com.punojsoft.springbootsecurity.bootsecurity.config;
 
+import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAccessDeniedHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -21,6 +23,10 @@ import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
+
+
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.inMemoryAuthentication()
@@ -59,6 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();
         http.formLogin()
+                .and()
+                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 .logout().deleteCookies("JSESSIONID")
                 .and()

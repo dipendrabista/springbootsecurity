@@ -25,14 +25,14 @@ public class PostController {
         return "post list";
     }
 
-    @GetMapping("add")
-    @PreAuthorize(value = "hasRole('USER')")
+    @GetMapping("/add")
+    @PreAuthorize(value = "hasAnyRole('ADMIN','USER')")
     public String add(Principal principal) {
         System.out.println("currently logged in user :" + principal);
         return "post add";
     }
 
-    @PostAuthorize(value = "hasAnyRole('ADMIN','USER')")
+    @PostAuthorize(value = "hasRole('ADMIN')")
     @GetMapping("/delete")
     public String delete(Authentication authentication) {
         System.out.println("currently loggedin user :" + authentication.getPrincipal() + " Credentials :" + authentication.getCredentials());
