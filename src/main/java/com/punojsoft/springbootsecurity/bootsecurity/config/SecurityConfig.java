@@ -33,6 +33,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          * prevent url from sending session information
          */
         http.sessionManagement().enableSessionUrlRewriting(false);
+        /**
+         * setting up session invalid and expired url
+         */
+        http.sessionManagement().invalidSessionUrl("/invalid-session")
+                .maximumSessions(2).expiredUrl("/expired-session");
     }
 
     @Bean
