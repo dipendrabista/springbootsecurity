@@ -1,0 +1,53 @@
+package com.punojsoft.springbootsecurity.bootsecurity.service;
+
+import com.punojsoft.springbootsecurity.bootsecurity.model.Role;
+import com.punojsoft.springbootsecurity.bootsecurity.model.User;
+import com.punojsoft.springbootsecurity.bootsecurity.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class UserService implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public UserDetails loadUserByUsername(String userName)
+            throws UsernameNotFoundException {
+
+        User user = userRepository.findUserByUsername(userName);
+        if (user == null) {
+            throw new UsernameNotFoundException(
+                    "No user found with username: " + userName);
+        }
+        boolean enabled = true;
+        boolean accountNonExpired = true;
+        boolean credentialsNonExpired = true;
+        boolean accountNonLocked = true;
+        return new org.springframework.security.core.userdetails.User
+                (user.getUsername(),
+                        user.getEncodedPassword(), enabled, accountNonExpired,
+                        credentialsNonExpired, accountNonLocked,
+                        getAuthorities(user.getRoles()));
+    }
+
+    private static List<GrantedAuthority> getAuthorities(List<Role> roles) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getRole()));
+        }
+        return authorities;
+    }
+
+    public User findUserByUserName(String username) {
+        return userRepository.findUserByUsername(username);
+    }
+}

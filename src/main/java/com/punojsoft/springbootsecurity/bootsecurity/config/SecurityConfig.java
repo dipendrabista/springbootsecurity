@@ -2,7 +2,8 @@ package com.punojsoft.springbootsecurity.bootsecurity.config;
 
 import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAccessDeniedHandler;
 import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAuthenticationFailureHandler;
-import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAuthenticationSuccess;
+import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAuthenticationSuccessHandler;
+import com.punojsoft.springbootsecurity.bootsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,37 +31,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Autowired
-    private CustomAuthenticationSuccess authenticationSuccessHandler;
+    private CustomAuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Autowired
     private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
+    @Autowired
+    private UserService userService;
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.inMemoryAuthentication()
 //                .withUser("admin").password("{noop}admin").roles("ADMIN", "USER")
 //                .and()
 //                .withUser("user").password("{noop}user").roles("USER");
-//    }
-
-    /**
-     * inmemory authentication example
-     */
-    @Bean
-    public UserDetailsService users() {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(encoder().encode("password"))
-                .roles("USER")
-                .build();
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(encoder().encode("password"))
-                .roles("USER", "ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user, admin);
+        auth.userDetailsService(userService);
     }
+
+//    /**
+//     * inmemory authentication example
+//     */
+//    @Bean
+//    public UserDetailsService users() {
+//        UserDetails user = User.builder()
+//                .username("user")
+//                .password(encoder().encode("password"))
+//                .roles("USER")
+//                .build();
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password(encoder().encode("password"))
+//                .roles("USER", "ADMIN")
+//                .build();
+//        return new InMemoryUserDetailsManager(user, admin);
+//    }
 
     @Bean
     BCryptPasswordEncoder encoder() {
@@ -76,8 +80,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/logout").permitAll()
-                .antMatchers("/h2-console/**").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/admin/registration").permitAll()
+                .antMatchers("/h2-console/**").permitAll();
+//                .anyRequest().authenticated();
         http.formLogin().successHandler(authenticationSuccessHandler).failureHandler(customAuthenticationFailureHandler)
                 .and()
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
