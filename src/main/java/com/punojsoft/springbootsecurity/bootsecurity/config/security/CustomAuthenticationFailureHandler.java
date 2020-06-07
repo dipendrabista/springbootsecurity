@@ -2,9 +2,8 @@ package com.punojsoft.springbootsecurity.bootsecurity.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.punojsoft.springbootsecurity.bootsecurity.config.security.event.OnLoginAttemptFailedEvent;
-import com.punojsoft.springbootsecurity.bootsecurity.facade.IAuthenticationFacade;
 import com.punojsoft.springbootsecurity.bootsecurity.model.User;
-import com.punojsoft.springbootsecurity.bootsecurity.service.UserService;
+import com.punojsoft.springbootsecurity.bootsecurity.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.AuthenticationException;
@@ -23,11 +22,7 @@ import java.util.Map;
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
     private static int loginAttempt = 0;
     @Autowired
-    private IAuthenticationFacade iAuthenticationFacade;
-    @Autowired
     private ApplicationEventPublisher eventPublisher;
-    @Autowired
-    private UserService userService;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
@@ -35,10 +30,11 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         httpServletRequest.getSession().setAttribute("loginAttempt", loginAttempt);
         if (loginAttempt > 3) {
             System.out.println("Your account is temporarly blocked");
-            User user = new User();
-            user.setUsername(httpServletRequest.getParameter("username"));
-            user.setPassword(httpServletRequest.getParameter("password"));
-            eventPublisher.publishEvent(new OnLoginAttemptFailedEvent(null, getAppUrl(httpServletRequest), httpServletRequest.getLocale(), user, httpServletResponse));
+            User user = User.builder()
+                    .username(httpServletRequest.getParameter("username"))
+                    .password(httpServletRequest.getParameter("password")).build();
+
+            eventPublisher.publishEvent(new OnLoginAttemptFailedEvent(null, AppUtils.getAppURI(httpServletRequest), httpServletRequest.getLocale(), user, httpServletResponse));
             return;
         }
         System.out.println("loginattempt " + loginAttempt);
@@ -50,7 +46,4 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 
     }
 
-    private String getAppUrl(HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-    }
 }

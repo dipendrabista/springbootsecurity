@@ -1,8 +1,7 @@
 package com.punojsoft.springbootsecurity.bootsecurity.model;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,10 +11,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Setter
-@Getter
 @Entity
 @Table(name = "tbl_users")
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -28,6 +30,9 @@ public class User implements UserDetails {
     private String password;
     private String encodedPassword;
     private boolean isAccountBlock = false;
+    
+    @OneToOne(mappedBy = "user")
+    private PasswordResetToken passwordResetToken;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
