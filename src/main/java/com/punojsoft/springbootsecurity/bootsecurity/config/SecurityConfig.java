@@ -2,6 +2,7 @@ package com.punojsoft.springbootsecurity.bootsecurity.config;
 
 import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAccessDeniedHandler;
 import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAuthenticationFailureHandler;
+import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAuthenticationProvider;
 import com.punojsoft.springbootsecurity.bootsecurity.config.security.CustomAuthenticationSuccessHandler;
 import com.punojsoft.springbootsecurity.bootsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private CustomAuthenticationProvider customAuthenticationProvider;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -45,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .withUser("admin").password("{noop}admin").roles("ADMIN", "USER")
 //                .and()
 //                .withUser("user").password("{noop}user").roles("USER");
-        auth.userDetailsService(userService);
+        auth.authenticationProvider(customAuthenticationProvider).userDetailsService(userService);
     }
 
 //    /**

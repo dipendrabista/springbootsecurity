@@ -28,15 +28,14 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException(
                     "No user found with username: " + userName);
         }
-        boolean enabled = true;
-        boolean accountNonExpired = true;
-        boolean credentialsNonExpired = true;
-        boolean accountNonLocked = true;
-        return new org.springframework.security.core.userdetails.User
-                (user.getUsername(),
-                        user.getEncodedPassword(), enabled, accountNonExpired,
-                        credentialsNonExpired, accountNonLocked,
-                        getAuthorities(user.getRoles()));
+
+//        return new org.springframework.security.core.userdetails.User
+//                (user.getUsername(),
+//                        user.getEncodedPassword(), enabled, accountNonExpired,
+//                        credentialsNonExpired, accountNonLocked,
+//                        getAuthorities(user.getRoles()));
+
+        return user;
     }
 
     private static List<GrantedAuthority> getAuthorities(List<Role> roles) {
@@ -49,5 +48,9 @@ public class UserService implements UserDetailsService {
 
     public User findUserByUserName(String username) {
         return userRepository.findUserByUsername(username);
+    }
+
+    public User lockUserAccount(User user) {
+        return userRepository.save(user);
     }
 }

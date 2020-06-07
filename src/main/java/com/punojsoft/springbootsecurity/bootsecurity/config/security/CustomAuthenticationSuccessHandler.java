@@ -21,6 +21,16 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        /**
+         * clear session
+         */
+        if (request.getSession().getAttribute("loginAttempt") != null) {
+            int loginAttempt = (int) request.getSession().getAttribute("loginAttempt");
+            if (loginAttempt < 3) {
+                request.getSession().removeAttribute("loginAttempt");
+            }
+        }
+
         handle(request, response, authentication);
         clearAuthenticationAttributes(request);
     }
